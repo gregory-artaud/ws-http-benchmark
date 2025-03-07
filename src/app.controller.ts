@@ -6,8 +6,7 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post()
-  getHello(): string {
+  getHello() {
     Logger.debug("Received http request");
-    return this.appService.getHello();
   }
 }
