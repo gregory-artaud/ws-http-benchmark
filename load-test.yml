@@ -3,20 +3,27 @@ config:
   phases:
     - duration: 60
       arrivalRate: 5
-      rampTo: 10
+      rampTo: 50
       name: "Warm up"
     - duration: 60
-      arrivalRate: 10
-      rampTo: 50
+      arrivalRate: 50
+      rampTo: 200
       name: "Ramp up to peak load"
     - duration: 300
-      arrivalRate: 50
+      arrivalRate: 200
       name: "Sustained load"
 
 scenarios:
   - name: "WebSocket Scenario"
     engine: "socketio"
     flow:
+      - emit:
+          channel: "message"
+          data: "Hello World!"
+      - think: 1
+      - emit:
+          channel: "message"
+          data: "Hello World!"
       - think: 1
       - emit:
           channel: "message"
@@ -24,6 +31,19 @@ scenarios:
 
   - name: "HTTP Scenario"
     flow:
+      - post:
+          url: "/"
+          expect:
+            - statusCode: 201
+            - contentType: "text/html"
+            - equals: "Hello World!"
+      - think: 1
+      - post:
+          url: "/"
+          expect:
+            - statusCode: 201
+            - contentType: "text/html"
+            - equals: "Hello World!"
       - think: 1
       - post:
           url: "/"
